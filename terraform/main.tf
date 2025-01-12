@@ -1,12 +1,12 @@
 variable "region" {
   type        = string
-  default     = " " #add the aws_region
+  default     = "us-east-1"
   description = "aws region variable"
 }
 
 variable "id" {
   type        = number
-  default     =  #add your asws user id
+  default     = 211125698138
   description = "aws user id"
 }
 
