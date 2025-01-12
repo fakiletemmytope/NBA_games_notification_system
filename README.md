@@ -18,7 +18,7 @@ In the world of sports, staying updated with game schedules is crucial for enthu
 3. **Data Processing** : The function processes the obtained data to extract relevant details (e.g., game time, teams, game-status, channel, scores e.t.c).
 4. **User Notification** : The processed data is sent to subscribed users via Amazon SNS.
 
-![img](./Screenshot%202025-01-11%20072052.png)
+![img](./Screenshot%202025-01-12%20152748.png)
 
 ### Implementation Steps
 
