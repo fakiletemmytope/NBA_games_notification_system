@@ -6,7 +6,7 @@ variable "region" {
 
 variable "id" {
   type        = number
-  default     =  #add your asws user id
+  default     =  #add your aws user id
   description = "aws user id"
 }
 
@@ -15,7 +15,7 @@ resource "aws_sns_topic" "gd_notification" {
   name = "gd_notification"
 }
 
-# an custom Iam_policy
+# a custom Iam_policy
 resource "aws_iam_policy" "gd_notification_policy" {
   name = "gd_notification_policy"
   policy = jsonencode(
