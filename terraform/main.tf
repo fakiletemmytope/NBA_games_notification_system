@@ -6,7 +6,7 @@ variable "region" {
 
 variable "id" {
   type        = number
-  default     = 211125698138
+  default     = #AWS USER ID
   description = "aws user id"
 }
 
@@ -75,13 +75,13 @@ resource "aws_iam_role_policy_attachment" "gd_notification_managed_attachment" {
 
 # Lambda function with role
 resource "aws_lambda_function" "gd_notification_lambda" {
-  
+
   filename      = "lambda_function.zip"
   function_name = "gd_notification_function"
   role          = aws_iam_role.gd_notification_role.arn
   handler       = "lambda_function.lambda_handler"
 
-  
+
 
   runtime = "python3.13"
 
@@ -91,5 +91,80 @@ resource "aws_lambda_function" "gd_notification_lambda" {
       BASEURL     = "https://api.sportsdata.io/v3/nba/scores/json/GamesByDate/"
       SNSTOPICARN = aws_sns_topic.gd_notification.arn
     }
+  }
+}
+
+
+# EventBridge (Scheduler) and its roles and policy
+
+# EventBridge policy
+resource "aws_iam_policy" "gd_event_scheduler_policy" {
+  name = "gd_eventbridge_schedular_policy"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "lambda:InvokeFunction"
+          ],
+          "Resource" : [
+            "${aws_lambda_function.gd_notification_lambda.arn}:*",
+            "${aws_lambda_function.gd_notification_lambda.arn}"
+          ]
+        }
+      ]
+    }
+  )
+}
+
+
+# EventBridge Role
+resource "aws_iam_role" "gd_event_scheduler_role" {
+  name = "gd_eventBridge_role"
+  assume_role_policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Principal" : {
+            "Service" : "scheduler.amazonaws.com"
+          },
+          "Action" : "sts:AssumeRole",
+          "Condition" : {
+            "StringEquals" : {
+              "aws:SourceAccount" : "${var.id}"
+            }
+          }
+        }
+      ]
+    }
+  )
+
+
+}
+
+# Attaching policy to role
+resource "aws_iam_role_policy_attachment" "gd_event_scheduler_attachment" {
+  role       = aws_iam_role.gd_event_scheduler_role.name
+  policy_arn = aws_iam_policy.gd_event_scheduler_policy.arn
+}
+
+# EventBridge set up
+resource "aws_scheduler_schedule" "gd_scheduler" {
+  name = "gd_schedular"
+
+
+  schedule_expression = "cron(0 22-23/2,0-2/1 12-13 1 ? 2025)"
+
+  target {
+    arn      = aws_lambda_function.gd_notification_lambda.arn
+    role_arn = aws_iam_role.gd_event_scheduler_role.arn
+  }
+
+  flexible_time_window {
+    mode = "OFF"
   }
 }
