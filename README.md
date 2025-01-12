@@ -53,7 +53,13 @@ terraform fmt; terraform validate
 terraform apply -auto-approve
 ```
 
-Note: To implement using terraform, terraform must be installed and the AWS credentials set. Also to clean up run the command: `terraform destroy -auto-approve`
+Note: To implement using terraform:
+
+Terraform must be installed and the AWS credentials set.
+
+Add the aws region and your aws user id to the region and id block respectively in the main.tf file
+
+To clean up run the command: `terraform destroy -auto-approve`
 
 ***Sample of notification sent to a user:***
 

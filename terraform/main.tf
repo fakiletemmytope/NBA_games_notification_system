@@ -1,12 +1,12 @@
 variable "region" {
   type        = string
-  default     = "us-east-1"
+  default     = " " #add the aws_region
   description = "aws region variable"
 }
 
 variable "id" {
   type        = number
-  default     = 211125698138
+  default     =  #add your asws user id
   description = "aws user id"
 }
 
@@ -75,14 +75,13 @@ resource "aws_iam_role_policy_attachment" "gd_notification_managed_attachment" {
 
 # Lambda function with role
 resource "aws_lambda_function" "gd_notification_lambda" {
-  # If the file is not in the current working directory you will need to include a
-  # path.module in the filename.
+  
   filename      = "lambda_function.zip"
   function_name = "gd_notification_function"
   role          = aws_iam_role.gd_notification_role.arn
   handler       = "lambda_function.lambda_handler"
 
-  # source_code_hash = data.archive_file.lambda.output_base64sha256
+  
 
   runtime = "python3.13"
 
