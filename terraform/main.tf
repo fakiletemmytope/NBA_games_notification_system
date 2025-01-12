@@ -10,9 +10,17 @@ variable "id" {
   description = "aws user id"
 }
 
-# a simple notification service
+# a simple notification service topic
 resource "aws_sns_topic" "gd_notification" {
   name = "gd_notification"
+}
+
+
+# topic subscriber
+resource "aws_sns_topic_subscription" "subscribed_user" {
+  topic_arn = aws_sns_topic.gd_notification.arn
+  protocol  = "email"
+  endpoint  = #Subscriber's Email 
 }
 
 # a custom Iam_policy
