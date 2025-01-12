@@ -43,6 +43,22 @@ In the world of sports, staying updated with game schedules is crucial for enthu
    * Test the entire flow manually to ensure data is fetched, processed, and sent correctly.
    * Deploy the Lambda function and monitor logs using AWS CloudWatch for troubleshooting.
 
+#### Implementation Using [terraform](./terraform)
+
+```bash
+git clone https://github.com/fakiletemmytope/NBA_games_notification_system.git
+cd NBA_games_notification_system/terraform
+terraform init
+terraform fmt; terraform validate
+terraform apply -auto-approve
+```
+
+Note: To implement using terraform, terraform must be installed and the AWS credentials set. Also to clean up run the command: `terraform destroy -auto-approve`
+
+***Sample of notification sent to a user:***
+
+![img](./Screenshot_20250112_151126_Gmail.jpg)
+
 ### Conclusion
 
 The NBA Game Notification System efficiently informs users about game schedules using a serverless architecture on AWS. This setup provides scalability, reliability, and ease of management, enhancing the experience for NBA fans.
